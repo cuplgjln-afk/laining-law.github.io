@@ -818,6 +818,106 @@
   [data-lang="en"] .en { display: block !important; }
   [data-lang="zh"] .en-only { display: none; }
   .en { display: none; }
+
+  /* ── ARTICLE MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,14,12,0.85);
+    z-index: 500;
+    backdrop-filter: blur(6px);
+    overflow-y: auto;
+    padding: 4rem 1rem;
+  }
+  .modal-overlay.open { display: flex; justify-content: center; align-items: flex-start; }
+  .modal-box {
+    background: var(--paper);
+    max-width: 780px;
+    width: 100%;
+    padding: 3.5rem;
+    position: relative;
+    animation: fadeUp 0.35s ease forwards;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    background: none; border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--rule);
+    transition: all 0.2s;
+  }
+  .modal-close:hover { color: var(--accent); border-color: var(--accent); }
+  .modal-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .modal-title {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 600;
+    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .modal-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .modal-body .art-p {
+    font-size: 0.95rem;
+    line-height: 2;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  .modal-body .art-h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin: 2rem 0 0.75rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid var(--accent);
+  }
+  .modal-body .art-list {
+    margin: 0.5rem 0 1rem 1.5rem;
+  }
+  .modal-body .art-list li {
+    font-size: 0.93rem;
+    line-height: 1.9;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+  }
+  .modal-body .art-numbered {
+    padding-left: 0.5rem;
+  }
+  .modal-author {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 900px) {
+    .modal-box { padding: 2rem 1.25rem; }
+  }
+
 </style>
 </head>
 <body id="body">
@@ -1031,40 +1131,69 @@
   </div>
 
   <div class="articles-grid reveal">
-    <a href="#" class="article-card">
+    <a href="#" class="article-card" onclick="event.preventDefault(); openModal('modal-video')">
       <div class="article-meta">
-        <span class="article-date">2025 · 03</span>
+        <span class="article-date">2026 · 02</span>
+        <span class="article-badge">最新</span>
+      </div>
+      <h3 class="article-title zh">AI生成=不侵权？不可不防的AI视频合规风险</h3>
+      <h3 class="article-title en" style="display:none;">AI-Generated ≠ Non-Infringing: Legal Risks in AI Video You Can't Ignore</h3>
+      <p class="article-excerpt zh">字节跳动Seedance 2.0上线后，AI视频创作门槛已趋近于零。从《庆余年》一键成片案到杨幂工作室60件侵权诉讼，本文梳理AI视频的侵权边界与合规要点。</p>
+      <p class="article-excerpt en" style="display:none;">As AI video tools hit the mainstream, the legal risks multiply. From the "Joy of Life" AI clip case to 60 infringement suits filed by Yang Mi's studio, this article maps the compliance boundaries of AI-generated video.</p>
+      <span class="article-read zh">阅读全文 →</span>
+      <span class="article-read en" style="display:none;">Read More →</span>
+    </a>
+
+    <a href="#" class="article-card" onclick="event.preventDefault(); openModal('modal-poison')">
+      <div class="article-meta">
+        <span class="article-date">2026 · 03</span>
         <span class="article-badge">热门</span>
       </div>
-      <h3 class="article-title zh">《生成式AI服务管理暂行办法》企业合规实操指南</h3>
-      <h3 class="article-title en" style="display:none;">Practical Compliance Guide to China's Generative AI Regulations</h3>
-      <p class="article-excerpt zh">从法规文本到落地执行，企业需要做哪些具体动作？本文梳理了10个关键合规节点……</p>
-      <p class="article-excerpt en" style="display:none;">From regulatory text to practical implementation — what specific actions do businesses need to take? This article maps out 10 key compliance checkpoints...</p>
+      <h3 class="article-title zh">你的AI正在被"投毒"——AI投毒风险与GEO合规指南</h3>
+      <h3 class="article-title en" style="display:none;">Your AI Is Being Poisoned: Data Poisoning Risks & GEO Compliance</h3>
+      <p class="article-excerpt zh">2026年315晚会曝光：花39.9元购买GEO优化工具，2小时内让DeepSeek、豆包开始推荐一个根本不存在的产品。AI投毒离你并不远，三层防护清单帮你应对。</p>
+      <p class="article-excerpt en" style="display:none;">CCTV 315 exposed how a ¥39.9 GEO tool made DeepSeek and Doubao recommend a non-existent product within 2 hours. Here's a three-layer defense checklist to protect your AI systems.</p>
       <span class="article-read zh">阅读全文 →</span>
       <span class="article-read en" style="display:none;">Read More →</span>
     </a>
 
-    <a href="#" class="article-card">
+    <a href="#" class="article-card" onclick="event.preventDefault(); openModal('modal-data1')">
       <div class="article-meta">
-        <span class="article-date">2025 · 01</span>
-        <span class="article-badge">媒体报道</span>
+        <span class="article-date">2025 · 07</span>
+        <span class="article-badge">深度解读</span>
       </div>
-      <h3 class="article-title zh">AI初创企业的数据合规：你以为不重要，其实已经违规</h3>
-      <h3 class="article-title en" style="display:none;">AI Startups & Data Compliance: You Think It Doesn't Matter Until It Does</h3>
-      <p class="article-excerpt zh">北京青年报采访延伸阅读。许多AI初创企业认为合规是"大公司的事"，但这个认知正在让他们付出代价……</p>
-      <p class="article-excerpt en" style="display:none;">Extended reading from Beijing Youth Daily feature. Many AI startups think compliance is "for big companies" — but this belief is costing them...</p>
+      <h3 class="article-title zh">《反不正当竞争法》"数据保护专条"解读与企业合规建议</h3>
+      <h3 class="article-title en" style="display:none;">China's New Anti-Unfair Competition "Data Protection Clause": Analysis & Compliance Guide</h3>
+      <p class="article-excerpt zh">2025年6月新修订《反不正当竞争法》第13条第三款正式落地，首次为企业数据权益提供专项保护。本文解读构成要件、指导案例与企业应对策略。</p>
+      <p class="article-excerpt en" style="display:none;">The June 2025 amendment to China's Anti-Unfair Competition Law introduced a dedicated data protection clause. This article breaks down the elements, leading cases, and what enterprises must do now.</p>
+      <span class="article-read zh">阅读全文 →</span>
+      <span class="article-read en" style="display:none;">Read More →</span>
+    </a>
+  </div>
+
+  <!-- 第4、5篇文章 -->
+  <div style="display:grid; grid-template-columns: repeat(2,1fr); gap:2rem; margin-top:2rem;" class="reveal">
+    <a href="#" class="article-card" onclick="event.preventDefault(); openModal('modal-data2')">
+      <div class="article-meta">
+        <span class="article-date">2025 · 07</span>
+      </div>
+      <h3 class="article-title zh">应对"数据保护专条"之企业数据合规建议</h3>
+      <h3 class="article-title en" style="display:none;">Enterprise Data Compliance Strategies Under the New Data Protection Clause</h3>
+      <p class="article-excerpt zh">数据分级保护、robots协议、区块链存证、PIA审计……新法落地后，平台经营者如何构建系统性数据合规防线？实操建议清单。</p>
+      <p class="article-excerpt en" style="display:none;">Data classification, robots protocols, blockchain notarization, PIA audits — a practical compliance checklist for platform operators responding to the new data protection rules.</p>
       <span class="article-read zh">阅读全文 →</span>
       <span class="article-read en" style="display:none;">Read More →</span>
     </a>
 
-    <a href="#" class="article-card">
+    <a href="#" class="article-card" onclick="event.preventDefault(); openModal('modal-virtual')">
       <div class="article-meta">
-        <span class="article-date">2024 · 11</span>
+        <span class="article-date">2025 · 12</span>
+        <span class="article-badge">新兴领域</span>
       </div>
-      <h3 class="article-title zh">隐私政策不只是法律文件：它是你和用户之间的契约</h3>
-      <h3 class="article-title en" style="display:none;">Privacy Policy as Contract: More Than a Legal Formality</h3>
-      <p class="article-excerpt zh">研究了50份国际大厂的隐私政策之后，我发现优秀的隐私政策有一个共同点……</p>
-      <p class="article-excerpt en" style="display:none;">After studying 50+ privacy policies from global tech companies, I found one thing the best ones all have in common...</p>
+      <h3 class="article-title zh">虚拟偶像AI数字人数据合规风险分析</h3>
+      <h3 class="article-title en" style="display:none;">Data Compliance Risks of Virtual Idol AI Digital Humans</h3>
+      <p class="article-excerpt zh">从数据收集、敏感信息处理到算法偏见与内容标识，AI数字人直播运营面临多重合规挑战。结合全国首例AI数字人侵权案与新出台的《拟人化互动服务管理办法》深度解析。</p>
+      <p class="article-excerpt en" style="display:none;">From data collection to biometric processing, algorithmic bias, and content labeling — a deep dive into compliance risks for AI virtual idol operators, with analysis of China's first AI digital human infringement case.</p>
       <span class="article-read zh">阅读全文 →</span>
       <span class="article-read en" style="display:none;">Read More →</span>
     </a>
@@ -1092,7 +1221,7 @@
           <span class="channel-icon">💬</span>
           <div class="channel-info">
             <div class="channel-label">WeChat · 微信</div>
-            <div class="channel-value">扫码添加 / Scan to Add</div>
+            <div class="channel-value">zj18620389047</div>
           </div>
         </a>
         <a href="#" class="contact-channel">
@@ -1106,14 +1235,14 @@
           <span class="channel-icon">📖</span>
           <div class="channel-info">
             <div class="channel-label">小红书 · Xiaohongshu</div>
-            <div class="channel-value">@赖律师AI合规</div>
+            <div class="channel-value">@赖宁律师</div>
           </div>
         </a>
         <a href="#" class="contact-channel">
           <span class="channel-icon">✉️</span>
           <div class="channel-info">
             <div class="channel-label">Email · 邮件</div>
-            <div class="channel-value">laining@lawfirm.com</div>
+            <div class="channel-value">cuplgjln@163.com</div>
           </div>
         </a>
       </div>
@@ -1202,5 +1331,487 @@
     });
   });
 </script>
+
+<div class="modal-overlay" id="modal-video">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-video')">✕ 关闭</button>
+    <div class="modal-badge">AI视频合规 · 2026.02</div>
+    <h2 class="modal-title">AI生成=不侵权？不可不防的AI视频合规风险</h2>
+    <div class="modal-meta">赖宁律师 · 2026年2月 · AI合规专栏</div>
+    <div class="modal-body">
+      <h3 class="art-h3">AI生成=不侵权？不可不防的AI视频合规风险</h3>
+
+<ul class="art-list">
+<li>2026年2月12日，字节跳动正式上线新一代AI视频生成模型Seedance 2.0，并接入旗下生成式AI创作平台“即梦”以及豆包App，将视频特效卷到了地板价，其卓越的自动化剪辑、素材匹配和特效叠加功能可根据文本或图像创建电影级视频，用户只需编写详细提示或上传一张图片，即可在60秒内生成带有原生音频的多镜头序列视频，人人都能创作好莱坞短片。在2026年春节联欢晚会上，十二花神图惊艳全场，一人一花一典故，当诗词意境、历史传说撞上现代科技，每一帧都美成壁纸。AI视频技术，具象了穿越古今的浪漫。</li>
+</ul>
+
+<ul class="art-list">
+<li>AI视频生成工具的普及，提高了创作的效率，也隐藏着法律风险。本文将讨论AI视频生成技术的法律风险边界，并结合典型案例，为创作者、平台及监管方提供合规参考。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>一、AI视频侵权案例及裁判倾向</strong></li>
+</ul>
+
+<ul class="art-list">
+<li>在《庆余年》一键成片案中，被告度加公司通过AI功能将《庆余年》切成3-7秒短视频，存储在服务器上供用户使用，湖南市中级人民法院认定构成对原告腾讯公司的信息网络传播权的直接侵权，判决赔偿80万元；</li>
+</ul>
+
+<ul class="art-list">
+<li>在《山海奇镜》预告片案中，原告创作者“闲人一坤”通过AI工具制作预告片，被告抖音主播“文刻创作”直接复制发布，原告主张停止侵权并赔偿50万元，目前该案仍在审理，但抖音平台已删除涉案视频。</li>
+</ul>
+
+<ul class="art-list">
+<li>在Getty Images v. Stability AI (美国）案件中，Getty指控Stability AI在训练Stable Diffusion模型时，未经授权复制其数百万受版权保护的图片（包含元数据），用于生成包含Getty水印的图像，构成直接/间接版权侵权。美国法院已判决图片版权侵权，但就训练数据是否构成侵权，因地域管辖问题尚在审理过程中。</li>
+</ul>
+
+<ul class="art-list">
+<li>2026春节期间AI合成明星拜年视频泛滥，央视网援引《民法典》及专家意见指出：人脸、人声作为生物识别信息，属于法律保护的敏感个人信息。未经授权使用名人肖像或声音合成拜年内容，直接侵害当事人肖像权及参照肖像权保护的声音权。即便合成视频标注“AI制作”或用于非商业目的（如亲友传播），只要未取得被仿名人单独同意，均可能构成侵权。</li>
+</ul>
+
+<ul class="art-list">
+<li>同一时期，杨幂工作室披露新增60件相关侵权案件进展，并在2026年2月12日将之前抖音AI视频侵权案胜诉细节公开，凸显公众（特别是名人）对AI合成技术的伦理焦虑与维权诉求。</li>
+</ul>
+
+<ul class="art-list">
+<li>技术中立不是免死金牌，利用AI合成抄袭作品或伪造他人人格标识的，依法承担侵权责任。透过上述案例，我们不禁要问：AI视频的权利范围和风险边界在哪里？</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>二、AI视频的法律规制</strong></li>
+</ul>
+
+<ul class="art-list">
+<li>在 AI 视频生成内容的监管方面，我国未形成严密的法律框架，尚在探索完善阶段：《网络安全法》主要规范 AI 视频内容的网络传播安全，要求生成内容不得含有违法不良信息，平台需履行内容审核与管理义务，防止利用 AI 视频危害国家安全或扰乱社会秩序。《数据安全法》重点关注 AI 视频模型训练及运行过程中的数据安全管理，特别是语料数据来源的合法性、分类分级保护以及重要数据出境的安全评估。《个人信息保护法》则聚焦于 AI 视频涉及的人脸、声音等生物识别信息的处理，要求处理敏感个人信息需取得个人单独同意，不得非法制作、使用、公开他人肖像，防止“换脸”、“换声”等技术侵犯公民人格权益。《互联网信息服务深度合成管理规定》将 AI 视频生成纳入深度合成服务监管，要求服务提供者进行算法备案及安全评估，并对生成内容进行显著标识；《生成式人工智能服务管理暂行办法》针对 AI 视频生成服务提出了训练数据合法、内容真实准确等具体要求，强调尊重知识产权，不得侵害他人依法享有的知识产权。《人工智能生成合成内容标识办法》强制要求 AI 生成视频必须进行显著标识，防止公众混淆；《网络信息内容生态治理规定》进一步明确了 AI 视频内容生态治理的责任主体，禁止利用 AI 技术制作传播虚假新闻或侵权视频。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>三、AI视频的法律风险分析</strong></li>
+</ul>
+
+<ul class="art-list">
+<li>（一）素材来源风险</li>
+</ul>
+
+<ul class="art-list">
+<li>若生成视频使用的训练数据包含未经授权的影视素材或个人作品，可能侵犯著作权；若使用未经肖像权人同意的面部图像，或利用AI技术伪造他人肖像，将侵犯肖像权；若使用未经授权的声音或者AI克隆明星声音用于视频配音，可能侵犯声音权；如果直接截取影视片段或高度模仿独创性表达（如分镜、台词），又将侵犯改编权。</li>
+</ul>
+
+<ul class="art-list">
+<li>（二）合成内容风险</li>
+</ul>
+
+<ul class="art-list">
+<li>若AI生成视频直接提取或高度模仿原作品独创性表达，将构成对信息网络传播权和改编权的侵害；视频内容未在显著位置标识“当前为AI生成内容”，或是短视频内容经多平台转发后标识被二次编辑移除（如去水印工具），将触发监管处罚风险。若用户仅输入简单指令（如“一键生成拜年视频”），AI生成内容缺乏人类实质性智力投入，难以获得著作权保护。如何量化用户对AI生成内容的智力贡献以判断是否达到独创性要求，仍处于探索阶段；</li>
+</ul>
+
+<ul class="art-list">
+<li>（三）平台传播风险</li>
+</ul>
+
+<ul class="art-list">
+<li>依据《互联网信息服务深度合成管理规定》，提供人脸、人声编辑功能的平台必须履行三重义务：其一，显著提示义务要求用户告知被编辑个人；其二，单独同意机制需取得被仿者明确授权；其三，全流程管理需建立事前提示、事中审核、事后追溯机制。平台必须对用户生成内容履行审核义务，否则可能承担连带责任，若未及时删除侵权内容（如杨幂工作室起诉的侵权视频），需对损害扩大部分承担连带责任。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>四、讨论2个有意思的问题</strong></li>
+</ul>
+
+<ul class="art-list">
+<li>（一）技术中立抗辩与算法可解释性的区别与联系？</li>
+</ul>
+
+<ul class="art-list">
+<li>在各地互联网法院陆续公布的AI侵权类案例中，我们可以发现：法官视角下，单纯主张技术中立抗辩已难以成立，如果技术设计存在侵权诱导性，将直接推翻中立性，司法审查的重点在于平台是否具有主观过错、技术设计是否诱导侵权、平台是否履行必要注意义务等等。技术中立不再是无往不利的避风港，而是需要主动证明的合规状态，算法可解释性从技术需求逐渐升格为法律义务，技术中立是结果，算法可解释性是路径，企业必须将可解释性设计前置到AI开发环节，通过算法可解释性佐证技术中立，才能真正获得法律保护。</li>
+</ul>
+
+<ul class="art-list">
+<li>（二）作品层面的合理使用 VS数据层面的合理使用</li>
+</ul>
+
+<ul class="art-list">
+<li>作品的合理使用源于《著作权法》第24条，适用于生成结果，举证责任由侵权内容使用者（创作者）承担；数据的合理使用源于《个人信息保护法》第13条及“数据二十条”相关文件精神，适用于训练过程，举证责任由AI模型训练者（平台或开发者）承担。当训练数据来源不合法时，AI生成内容的独创性是否存疑？未建立数据来源追溯机制的模型，其生成内容是否推定存在侵权风险？毒树之果的难题仍在热议，但著作权与数据的双重合规是各界共识，否则一个视频可能同时触发数据侵权与作品侵权的双重诉讼并面临高额赔偿。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>五、合规建议</strong></li>
+</ul>
+
+<ul class="art-list">
+<li>（一）AI生成内容标识</li>
+</ul>
+
+<ul class="art-list">
+<li>平台应强制要求所有AI生成视频添加显性水印和隐性标识，建立水印检测系统，对未添加标识的AI生成内容进行拦截和处理；开发者应将水印技术嵌入AI生成工具，确保内容生成时自动添加标识</li>
+</ul>
+
+<ul class="art-list">
+<li>（二）训练数据合法授权</li>
+</ul>
+
+<ul class="art-list">
+<li>开发者应建立训练数据溯源系统，记录数据来源、获取方式和授权状态；开发者或用户应与版权方签订书面授权协议，明确使用范围、地域、期限、派生与再授权等条款；开发者对训练数据进行合规审查，排除未经授权的内容。</li>
+</ul>
+
+<ul class="art-list">
+<li>（三）平台严格管理</li>
+</ul>
+
+<ul class="art-list">
+<li>建立AI视频内容实时监测系统，对明显侵权内容进行自动拦截；根据使用场景和目的，实施分级授权管理，区分个人学习、研究与商业用途；开发内容查重系统，对用户上传内容进行相似度比对；设置提示词过滤机制，对明显涉及侵权的关键词进行拦截；建立肖像黑名单，对高知名度人士的肖像特征进行保护性过滤等。</li>
+</ul>
+
+<ul class="art-list">
+<li>（四）创作者合规使用</li>
+</ul>
+
+<ul class="art-list">
+<li>自行留存或要求平台保存AI生成内容的创作过程记录，包括提示词修改日志、分镜设计草图等，作为证明独创性的证据；创作过程中仅使用平台授权人脸库或AI生成无特征虚拟人，影视片段采用CC0协议或使用正版素材库，音乐和字体使用AI工具内置免版税资源；进行风险自查，使用多种渠道验证肖像权与版权风险；在视频起始画面和视频播放周边的适当位置（或在视频末尾和中间适当位置）添加“AI生成”显著提示标识，确保公众能够清晰识别等等。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>六、总结</strong></li>
+</ul>
+
+<ul class="art-list">
+<li>AI视频生成技术正在重塑内容创作的边界，为创作者带来前所未有的便利，同时也带来了更复杂的法律风险。对于创作者而言，应充分认识AI视频生成的法律风险，尊重他人知识产权，合法使用肖像和声音，规范记录创作过程，为可能的著作权保护奠定基础。对于平台而言，需建立完善的AI内容审核机制，部署严密的筛查检测技术，履行内容标识义务，明确平台责任边界，在技术创新与法律合规之间找到平衡点。</li>
+</ul>
+
+<ul class="art-list">
+<li>万物皆有其律，技术创新与法律规制的竞速已成为时代命题。未来的现象级内容，不仅诞生于算法的突破，更根植于对法律边界的精准丈量，唯有将合规基因植入创作源头，方能在AI浪潮中构筑真正的护城河。</li>
+</ul>
+    </div>
+    <div class="modal-author">作者：赖宁 · 卓建律师事务所 · AI数据合规专项</div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-poison">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-poison')">✕ 关闭</button>
+    <div class="modal-badge">AI安全 · GEO合规 · 2026.03</div>
+    <h2 class="modal-title">你的AI正在被"投毒"——AI投毒风险与GEO合规指南</h2>
+    <div class="modal-meta">赖宁律师 · 2026年3月 · AI合规专栏</div>
+    <div class="modal-body">
+      <p class="art-p">AI投毒与GEO热议：你的模型正在被“投毒”，你知道吗？🫣</p>
+
+<p class="art-p">你可能觉得这离自己很远，但事实上，<strong>你每天都在用的AI助手、推荐系统，可能已经被悄悄</strong><strong>“</strong><strong>污染</strong><strong>”</strong><strong>了</strong>。更可怕的是，这种投毒不需要黑客技术，甚至只需要花39.9元</p>
+
+<p class="art-p">真实案例：AI是如何被“毒”到的？</p>
+
+<p class="art-p">39.9元就能让AI说谎（315晚会曝光）</p>
+
+<p class="art-p">2026年央视315晚会曝光了一个让人瞠目结舌的案例：</p>
+
+<p class="art-p"><strong>「Apollo-9智能手环」</strong>，一个<strong>根本不存在</strong>的产品，却在3天内被各大AI模型推荐为"智能健康手环首选"。</p>
+
+<p class="art-p"><strong>攻击手法简单到可怕：</strong> 攻击者花39.9元购买"力擎GEO优化系统"，系统批量生成虚假软文，在多个平台同时分发，制造"多来源一致"的假象，欺骗AI爬虫。2小时后，DeepSeek、豆包等主流AI开始推荐这个虚构产品。</p>
+
+<p class="art-p">AI模型在训练时会抓取全网数据，如果某个信息在多个可信来源同时出现，AI就会认为这是客观事实。攻击者正是利用了这一点，用廉价工具制造虚假共识。</p>
+
+<p class="art-p">🤔</p>
+
+<p class="art-p">技术拆解：为什么AI这么脆弱？</p>
+
+<p class="art-p art-numbered">数据投毒：污染源头</p>
+
+<p class="art-p">攻击者不是在攻击模型本身，而是在<strong>污染训练数据源</strong><strong>，</strong>AI大模型喝了有毒数据，自然就会生病。生成式AI存在训练数据量巨大（TB级别）、数据来源复杂（全网抓取）、难以逐条人工审核的致命弱点。</p>
+
+<p class="art-p art-numbered">对抗样本攻击</p>
+
+<p class="art-p">给图片加一点人眼看不见的噪声，AI就会瞎。比如：一张熊猫图片 + 特殊噪声 = AI识别为“长臂猿”。<strong>在GEO优化场景下，风险更高</strong><strong>，</strong>攻击者可能故意上传带对抗样本的图，AI学习后会产生系统性错误。</p>
+
+<p class="art-p art-numbered">GEO优化的双刃剑</p>
+
+<p class="art-p">GEO（生成式引擎优化） 本意是好的，通过高质量内容让AI更懂你。但有人把它用歪了：用虚假内容优化搜索结果，用付费软文污染知识库， 用技术手段操纵AI推荐。</p>
+
+<p class="art-p">🛡️GEO合规指南：三层防护清单</p>
+
+<p class="art-p">第一层：数据层防护（从源头堵住）</p>
+
+<p class="art-p art-numbered"><strong>建立信源白名单</strong><strong>：</strong> 优先采用官方机构、学术期刊、持牌媒体， 慎用匿名论坛、营销号、未验证自媒体</p>
+
+<p class="art-p art-numbered"><strong>交叉验证机制</strong><strong>：</strong>商业推荐类回答必须进行多源比对，识别异常集中出现的内容</p>
+
+<p class="art-p art-numbered"><strong>透明度强制披露</strong><strong>：</strong>AI回答必须标注引用来源，提供可点击链接，让用户能追溯</p>
+
+<p class="art-p">第二层：模型层防护（增强AI免疫）</p>
+
+<p class="art-p art-numbered"><strong>对抗性测试常态化</strong><strong>：</strong>开发阶段主动加入投毒样本， 通过对抗训练提升模型鲁棒性</p>
+
+<p class="art-p art-numbered"><strong>持续行为监控</strong><strong>：</strong>部署异常检测系统，实时监控模型输出行为</p>
+
+<p class="art-p art-numbered"><strong>供应链安全管理</strong><strong>：</strong>对开源框架、预训练权重进行安全认证，防范上游污染</p>
+
+<p class="art-p">第三层：部署层防护（运行时保障）</p>
+
+<p class="art-p art-numbered"><strong>采集</strong><strong>安全过滤</strong><strong>：</strong>训练数据采集环节增加安全扫描，识别并排除含隐蔽错误的内容</p>
+
+<p class="art-p art-numbered"><strong>输出验证机制</strong><strong>：</strong>对代码生成类模型的输出进行语法检查，对推荐类回答进行真实性复核</p>
+
+<p class="art-p art-numbered"><strong>应急响应预案</strong><strong>：</strong>制定发现投毒攻击后的处置流程和用户通知机制</p>
+
+<p class="art-p">⚠行业警示：五个常见误区</p>
+
+<p class="art-p">误区一：“我们数据量小，不值得攻击”</p>
+
+<p class="art-p">❌ 错！国外研究证明<strong>小数据也能造成大危害</strong>。攻击者可能不是针对你，而是<strong>通过你污染整个开源生态</strong>。</p>
+
+<p class="art-p">误区二：“用了大厂模型就一定安全”</p>
+
+<p class="art-p">❌ 错！大厂模型也可能用有毒数据训练。<strong>你的微调数据、业务数据也可能被污染</strong>。</p>
+
+<p class="art-p">误区三：“等出事再说”</p>
+
+<p class="art-p">❌ 错！数据投毒的危害有滞后性。等发现时，可能已经污染了多个下游应用，损害了品牌声誉，面临监管处罚</p>
+
+<p class="art-p">误区四：“技术问题技术解决”</p>
+
+<p class="art-p">❌ 错！AI投毒不仅是技术问题，更是<strong>管理问题</strong><strong>、</strong> <strong>合规问题</strong><strong>甚至</strong><strong>伦理问题</strong></p>
+
+<p class="art-p">误区五：“GEO优化就是SEO，随便做”</p>
+
+<p class="art-p">❌ 错！GEO和投毒违规操作只有一线之隔</p>
+    </div>
+    <div class="modal-author">作者：赖宁 · 卓建律师事务所 · AI数据合规专项</div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-data1">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-data1')">✕ 关闭</button>
+    <div class="modal-badge">法规解读 · 2025.07</div>
+    <h2 class="modal-title">《反不正当竞争法》"数据保护专条"解读</h2>
+    <div class="modal-meta">赖宁律师 · 2025年7月 · AI合规专栏</div>
+    <div class="modal-body">
+      <p class="art-p">《反不正当竞争法》“数据保护专条”解读</p>
+
+<p class="art-p">在数字经济时代，数据成为企业重要的资产和竞争优势来源。一些企业通过不正当手段获取、使用或披露其他企业的数据，严重损害了市场竞争的公平性和合法性。2025年6月27日，十四届全国人大常委会第十六次会议表决通过了新修订的《中华人民共和国反不正当竞争法》，其中第 13 条第三款 “数据保护专条” 的出台，为企业在数据保护和商业秘密保护方面提供了新的法律武器。</p>
+
+<p class="art-p">一、“数据保护专条” 立法背景</p>
+
+<p class="art-p">在《反不正当竞争法》修订之前，企业数据权益一般通过著作权纠纷、商业秘密纠纷寻求司法救济，然而其保护的范围稍显不足，并非所有数据都能构成著作权意义上的“作品”，而企业数据构成“商业秘密”的门槛也很高。更为常见的情况是通过旧《反不正当竞争法》一般条款（第2条）“经营者在生产经营活动中，应当遵循自愿、平等、公平、诚信的原则，遵守法律和商业道德”和互联网专条（第12条）兜底条款“经营者不得利用技术手段，通过影响用户选择或者其他方式，实施下列妨碍、破坏其他经营者合法提供的网络产品或者服务正常运行的行为：（四）其他妨碍、破坏其他经营者合法提供的网络产品或者服务正常运行的行为”对数据权益予以保护。</p>
+
+<p class="art-p">人民法院在适用旧《反不正当竞争法》第2条和第12条对经营者的商业数据实施保护的司法实践中，已经积累了一些裁判规则：<strong>即在缺乏专门规定的情况下，适用一种兜底和例外的思路来认定不正当竞争。</strong>区别在于，适用第2条审理案件侧重于商业道德和一般侵权，有利于保护经营者权益，但“商业道德”较为抽象难以裁量；适用第12条兜底条款审理案件侧重于技术行为和不正当竞争，有利于保护中立性技术应用和信息流动环境，但获取商业数据未必要采取网络技术手段，导致数据保护方面存在局限。</p>
+
+<p class="art-p">故而，新《反不正当竞争法》第13条在吸收旧法第12条互联网专条内容的基础上，新增第三款规定专门用于保护数据权益。</p>
+
+<p class="art-p">二、“数据保护专条”构成要件</p>
+
+<ul class="art-list">
+<li>《反不正当竞争法》第13条第三款规定：“经营者不得以欺诈、胁迫、避开或者破坏技术管理措施等不正当方式，获取、使用其他经营者合法持有的数据，损害其他经营者的合法权益，扰乱市场竞争秩序。”</li>
+</ul>
+
+<ul class="art-list">
+<li>上述规定明确了数据的权利客体和保护范围，已形成一种权利保护的法律框架。具体而言，“经营者合法持有的数据”确定的是数据保护的适格权利客体，合法持有的企业数据指经营者在生产经营活动中累积形成并用于生产经营活动的数据，包括原始数据集合和经加工形成的数据产品；“欺诈、胁迫、避开或者破坏技术管理措施等不正当方式获取使用”有限列举了侵权行为范围，数据使用以数据获取为前提，但常见情形为数据获取和数据使用同时存在，可推知本条款主要规制不正当获取数据的行为，例如破坏保护措施（如反爬取技术、Robots协议）、违反数据平台管理规则（平台协议等）、欺骗（如伪装成数据平台或用户）等。当然，也规制独立的不正当使用数据，如违反协议超范围使用正当获取的数据；“损害其他经营者的合法权益，扰乱市场竞争秩序”规定为损害后果，此前的司法裁判通常在认定存在数据获取使用行为之后，通过分析对数据持有人权益的损害以及对竞争秩序的损害，来评判行为的不正当性，损害后果要件沿用了此前的司法裁判规则，同时对未来的技术路径是否构成不正当获取使用做了兜底。这种条文结构符合企业数据使用的实际，也适配当前数据保护的现实需求。</li>
+</ul>
+
+<p class="art-p">三、与传统商业秘密保护的衔接与区分</p>
+
+<p class="art-p"><strong>1.保护对象的拓展。</strong>“数据保护专条”保护范围涵盖未形成商业秘密但具有商业价值的数据集合，如用户行为数据、交易数据等，突破了传统商业秘密“秘密性、价值性、保密性”三要件限制。例如，平台通过用户协议积累的客户偏好数据、企业经营数据，虽未单独构成商业秘密，但其聚合形成的经营性利益仍受该条款保护。</p>
+
+<ul class="art-list">
+<li>  <strong>2.</strong><strong>行为规制的</strong><strong>不同</strong><strong>。</strong>相较于商业秘密保护侧重对“非法获取、披露、使用”行为的禁止，“数据保护专条”更强调对“擅自获取并实质性替代”行为的打击。例如，未经授权批量抓取竞争对手平台数据并用于自身服务，即使未直接披露数据内容，若导致用户流量转移，也可能构成不正当竞争。这种行为不仅侵犯了其他企业的数据权益，还可能导致市场竞争的不公平，因此需要通过法律手段进行规制。</li>
+</ul>
+
+<p class="art-p">3.保护逻辑的内在协同。商业秘密保护和数据保护的核心价值目标均是维护企业的竞争优势，制止不正当竞争行为。在数字经济时代，数据已成为企业商业秘密的重要载体和表现形式，“数据保护专条” 可视为商业秘密保护在数字领域的延伸与细化，二者共同致力于保护企业的创新成果和经济利益，措施手段互补，促进市场的公平竞争。</p>
+
+<p class="art-p">四、指导案例与裁判规则提炼</p>
+
+<p class="art-p">指导性案例262号：某科技有限公司诉某文化传媒有限公司不正当竞争纠纷案</p>
+
+<p class="art-p">案例简介：某科技有限公司是甲APP的经营者。某文化传媒有限公司是乙APP的经营者。2018年11月至2019年5月期间，乙APP上有50392个短视频与甲APP的短视频一致，且短视频中含有甲APP专有的代码。案涉短视频中，包含19079个注册用户昵称、用户头像。其中，15924个与甲APP相同；127处评论内容、顺序、标点符号与甲APP相同。经查，约40%的短视频具有独创性，构成作品；其余短视频有一定价值但不具有独创性，属于录像制品。某科技公司以不正当竞争纠纷为由提起诉讼，请求法院判令某文化公司消除影响、赔偿经济损失人民币4000万元。北京市海淀区人民法院认定，某文化公司的行为实质性替代了某科技公司的数据服务，构成不正当竞争，判决某文化公司赔偿某科技公司 500 万元。某文化公司不服一审判决，提起上诉，北京知识产权法院二审驳回上诉，维持原判。</p>
+
+<p class="art-p">裁判规则：</p>
+
+<ul class="art-list">
+<li>1.网络平台经营者在其对数据集合形成的经营性利益受到侵害时，可以请求人民法院依法保护。对于未经许可获取并向公众提供相关数据，实质性替代网络平台产品或者服务，扰乱市场竞争秩序、损害网络平台经营者或者其他权利人合法权益的行为，人民法院可以适用《中华人民共和国反不正当竞争法》有关规定，认定构成不正当竞争行为。</li>
+</ul>
+
+<ul class="art-list">
+<li>2.数据爬取行为的侵权要件为：未经许可获取+实质性替代产品或服务+扰乱市场竞争秩序、损害经营者或其他权利人合法权益。</li>
+</ul>
+
+<p class="art-p">3.如何判断“实质性替代”：若侵权行为导致用户无需访问原平台即可获取等效服务，即使数据未直接公开传播，也构成对数据权益的根本损害。</p>
+
+<p class="art-p">五、结语</p>
+
+<p class="art-p">该条款将传统商业秘密制度难以覆盖的企业持有数据纳入保护范围，对技术手段的管控更为精准，对非法获取、使用他人数据的行为进行了严格规制，填补了我国在数据保护法律领域的空白，具有重要的里程碑意义。</p>
+
+<p class="art-p">作者：赖宁</p>
+    </div>
+    <div class="modal-author">作者：赖宁 · 卓建律师事务所 · AI数据合规专项</div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-data2">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-data2')">✕ 关闭</button>
+    <div class="modal-badge">企业合规建议 · 2025.07</div>
+    <h2 class="modal-title">应对"数据保护专条"之企业数据合规建议</h2>
+    <div class="modal-meta">赖宁律师 · 2025年7月 · AI合规专栏</div>
+    <div class="modal-body">
+      <p class="art-p">应对“数据保护专条”之企业数据合规建议</p>
+
+<p class="art-p">在数字经济时代，数据成为企业重要的资产和竞争优势来源。一些企业通过不正当手段获取、使用或披露其他企业的数据，严重损害了市场竞争的公平性和合法性。2025年6月27日，十四届全国人大常委会第十六次会议表决通过了新修订的《中华人民共和国反不正当竞争法》，其中第 13 条第三款 “数据保护专条”的出台，为企业在数据保护和商业秘密保护方面提供了新的法律武器。</p>
+
+<p class="art-p">尽管“数据保护专条”对非法技术措施、不正当获取使用行为进行了规范，但没有将最高院典型案例中广受关注的“同质化替代”还是“实质性替代”的判断要件纳入，这就留下了是否需要以数据爬取行为造成“实质性替代”作为判断要件的难点与争议，问题的存在也给特定场景下的数据爬取行为留下了正当性空间。未雨绸缪，平台经营者需做好数据合规措施，律师建议如下：</p>
+
+<p class="art-p">一、构建数据分级保护体系</p>
+
+<ul class="art-list">
+<li><strong>1.</strong><strong>核心商业秘密数据：</strong>对于如客户名单、技术参数等构成核心商业秘密的数据，采用加密存储技术，确保数据在存储过程中的安全性，防止数据被窃取或篡改；实施权限分级管理，根据员工的工作岗位和职责，赋予不同的访问权限；同时结合《商业秘密保护规定》，建立完善的合规管理体系。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>2.</strong><strong>一般商业数据：</strong>像用户浏览记录、市场调研数据等一般性商业数据，企业需通过平台规则声明，明确数据的所有权和使用规则，告知用户和第三方数据的使用范围和限制；通过数据接口授权，严格控制第三方对数据的访问和使用，确保数据的使用符合企业的利益和法律规定。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>3.</strong><strong>公开共享数据：</strong>对于行业报告、公开数据集等公开共享数据，企业需注明数据的来源与使用限制，防止数据被恶意整合后反向损害企业竞争优势。</li>
+</ul>
+
+<p class="art-p">二、加强技术措施防御</p>
+
+<ul class="art-list">
+<li><strong>1.</strong><strong>设置 robots 协议与反爬措施</strong>：在平台 robots 协议中明确数据抓取规则，告知其他网站或爬虫程序哪些数据可以被抓取，哪些数据禁止抓取。对核心数据接口设置验证码、频次限制等反爬措施，防止恶意爬虫程序大量抓取企业数据。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>2.</strong><strong>区块链存证</strong>：借助区块链技术的不可篡改、可追溯特性，对数据生成、流转过程存证。在数据生成时，将数据的相关信息，如数据内容、生成时间、生成者等，记录到区块链上；</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>3.</strong><strong>措施公示与留痕</strong><strong>：</strong>在平台网络服务协议中明确技术措施（如“本平台数据采用 SM4 加密，禁止未经授权爬取”），同时留存措施部署/更新日志至少 3 年。​</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>4.</strong><strong>第三方合作合规</strong><strong>：</strong>与数据处理方签订《技术措施维护协议》，明确其不得规避防护机制。​</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>5.</strong><strong>定期有效性评估</strong><strong>：</strong>每季度开展渗透测试，每年依据《网络数据安全管理条例》要求进行合规审计，及时修复措施漏洞。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>三、</strong><strong>人员与流程管控</strong></li>
+</ul>
+
+<ul class="art-list">
+<li><strong>1.</strong><strong>签订《保密协议》</strong>：与接触敏感数据的员工签订《保密协议》，明确数据使用范围、保密义务及离职脱密期义务。</li>
+</ul>
+
+<ul class="art-list">
+<li>2.<strong>建立</strong><strong>个人信息保护</strong><strong>审计机制</strong>：定期开展PIA及个人信息保护合规审计，对数据查询、导出、传输等行为进行记录，留存评估档案。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>3.</strong><strong>定期组织培训</strong>：定期组织员工参加数据合规与商业秘密保护培训，邀请专业的法律人士或行业专家进行授课，通过实际案例分析，提高员工的数据合规意识和商业秘密保护意识。</li>
+</ul>
+
+<ul class="art-list">
+<li>4.<strong>制度更新</strong>：每年度更新《数据保护合规手册》，关注国家和地方出台的数据保护法规政策及技术标准，及时将新法规解读、行业最佳实践及内部处罚机制纳入合规手册。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>四、维权</strong><strong>策略选择</strong></li>
+</ul>
+
+<ul class="art-list">
+<li><strong>1.</strong><strong>行政投诉</strong>：针对大规模数据侵权行为，向市场监管部门及网络安全部门举报。若认定侵权成立，将对侵权方采取高额罚款、责令停止侵权等行政处罚措施。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>2.</strong><strong>民事诉讼</strong>：结合“数据保护专条”与商业秘密条款提起诉讼，主张损害赔偿。在诉讼过程中，可申请法院调取侵权方数据服务器日志作为证据，以证明侵权方的侵权行为和侵权后果。</li>
+</ul>
+
+<ul class="art-list">
+<li><strong>3.</strong><strong>刑事报案</strong>：若侵权行为涉及侵入计算机系统、窃取商业秘密等，同步向公安机关报案，追究刑事责任。</li>
+</ul>
+
+<p class="art-p">总结</p>
+
+<p class="art-p">“数据保护专条”的出台标志着我国反不正当竞争法律体系向数字经济的深度延伸，为商业秘密与数据保护提供了更精准的法律工具。企业需把握立法精神，在数据收集、使用、共享中坚守 “合法、必要、诚信” 原则，构建符合自身业务特点的保护体系。未来，随着数据要素市场化配置的推进，司法与执法实践将进一步明确数据权益的边界，唯有合规经营、创新发展，才能在数字竞争中筑牢商业秘密与数据保护的双重防线。</p>
+
+<p class="art-p">作者：赖宁</p>
+    </div>
+    <div class="modal-author">作者：赖宁 · 卓建律师事务所 · AI数据合规专项</div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-virtual">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-virtual')">✕ 关闭</button>
+    <div class="modal-badge">新兴领域 · 2025.12</div>
+    <h2 class="modal-title">虚拟偶像AI数字人数据合规风险分析</h2>
+    <div class="modal-meta">赖宁律师 · 2025年12月 · AI合规专栏</div>
+    <div class="modal-body">
+      <p class="art-p">虚拟偶像AI数字人数据合规风险分析</p>
+
+<p class="art-p art-numbered">虚拟偶像AI数字人的应用场景</p>
+
+<p class="art-p">虚拟偶像AI数字人的应用场景覆盖了娱乐、商业、教育、金融等多个领域。在娱乐领域，虚拟偶像通过直播、短视频、虚拟演唱会等形式与粉丝互动；在商业营销领域，AI数字人已成为直播电商品牌营销的重要工具，例如虚拟主播带货、虚拟偶像数字广告等；在企业服务领域，AI数字人广泛应用于智能客服、虚拟培训、数字营销及远程协作等场景。</p>
+
+<p class="art-p art-numbered">虚拟偶像AI数字人的法律规制</p>
+
+<p class="art-p">在虚拟偶像AI数字人的监管方面，我国形成了以《网络安全法》《数据安全法》《个人信息保护法》为基础，以行业规范为补充的多层次法律框架体系。</p>
+
+<p class="art-p">《网络安全法》主要规范AI数字人的网络行为和内容发布，要求其不得利用网络制作、复制、发布、传播含有虚假信息、淫秽色情、恐怖暴力等内容。《数据安全法》重点关注AI数字人运营过程中的数据安全保护，特别是在数据收集、存储、使用、加工、传输、提供、公开等环节的安全保障义务。《个人信息保护法》则聚焦于AI数字人在与用户互动过程中收集、处理个人信息的行为规范，要求遵循合法、正当、必要和诚信原则，不得过度收集个人信息。</p>
+
+<p class="art-p">《互联网信息服务深度合成管理规定》对AI数字人等深度合成服务提出了明确的监管要求；《人工智能生成合成内容标识办法》要求 AI 生成内容需标识并持续提示消费者，运营方应当按照国家有关规定开展安全评估。《网络主播行为规范》《网络直播营销管理办法（试行）》将利用人工智能技术合成的虚拟主播及内容纳入监管范围，对虚拟偶像从事网络直播营销活动的法律责任作出了具体规定。</p>
+
+<p class="art-p art-numbered">AI数字人的案例指导</p>
+
+<p class="art-p">全国首例AI数字人纠纷当属2023 年杭州互联网法院审结的数字人Ada侵权案件。该案中，上海魔珐公司于 2019年10月通过公开活动发布了数字人Ada及相关视频。随后，2022年7月杭州四海公司未经授权在抖音发布了2段含有 Ada 的视频画面。法院审理认为，虚拟数字人虽然并非法律意义上的表演者，不享有表演者权，也不享有视听作品的著作权或录像制作者的邻接权，但是，魔珐公司作为该虚拟数字人的制作方以及真人演员所属公司，依法或依约拥有该虚拟数字人相关的权利。法院认定 Ada 形象构成美术作品，四海公司的行为侵犯了原告的美术作品、视听作品、录像制品以及表演者的信息网络传播权，同时构成虚假宣传的不正当竞争。最终判决四海公司为魔珐公司消除影响并赔偿经济损失（包含维权合理费用）12 万元。此案过后，在数字人形象著作权、AI合成声音权、虚拟主播责任、平台审核义务等方面逐步积累了一些规则与共识[^e0]。</p>
+
+<p class="art-p art-numbered">AI数字人的数据合规风险</p>
+
+<p class="art-p">鉴于当前尚未成熟的市场规则和训练数据的黑盒现状，AI数字人研发环节的算法备案、模型训练及数据处理等问题暂不纳入讨论范围，本文聚焦于AI数字人上线运营阶段的数据合规风险：</p>
+
+<p class="art-p"><strong>1.数据收集风险。</strong>在AI数字人互动场景下，用户往往在使用过程中被动地产生大量数据，包括互动记录、行为轨迹、偏好信息等。《个人信息保护法》要求运营方需要在用户注册、使用过程中明确告知数据收集的范围、目的和方式，并获得用户的明确同意。在即时、复杂的应用场景下，运营方如何合法取得用户的授权同意，是一项严峻的挑战。</p>
+
+<p class="art-p"><strong>2.敏感个人信息风险。</strong>AI数字人在运营过程中可能收集用户的生物识别信息（如人脸、声纹）、健康信息、金融信息等敏感个人信息。《个人信息保护法》对敏感个人信息的处理设定了更为严格的要求，必须具有特定的目的和充分的必要性，并采取严格的保护措施。运营方必须仅收集为实现特定目的所必需的最少个人信息，并在目的达成后及时删除或匿名化处理，采取隐私计算等技术措施保障数据安全处理。</p>
+
+<p class="art-p"><strong>3.算法偏见风险。</strong>算法模型可能隐含偏见或错误信息，例如，AI 推荐系统若基于用户画像进行歧视性定价，将违反公平交易原则。基于《互联网信息服务算法推荐管理规定》，AI数字人运营方需要采用可解释的 AI 技术，如决策树、规则引擎等，或者对深度学习模型进行可解释性改造，使其决策过程能够被理解和验证，防止算法产生歧视性结果，确保算法决策的公平性和无偏见性。</p>
+
+<p class="art-p"><strong>4.用户画像与自动化决策风险。</strong>AI数字人在与用户进行交互的过程中，有机会获取用户偏好、行为习惯等大量的个人信息用于用户画像与精准推送。《个人信息保护法》对自动化决策和用户画像作出了严格规定，要求保证决策的透明度和结果的公平、公正，当运营方向用户推送内容或进行商业营销时，必须同时提供不针对个人特征的通用选项和拒绝方式。</p>
+
+<p class="art-p"><strong>5.内容标识风险。</strong>在AI数字人直播场景中运营方为追求拟真感可能会淡化标识（标识尺寸过小、颜色与背景融合等），或是短视频内容经多平台转发后标识被二次编辑移除（如去水印工具）。《人工智能生成合成内容标识办法》要求 AI 生成内容需显著标识并持续提示用户，运营方可以采用实时水印技术并多模态覆盖，确保裁剪/缩放/转发后仍可见“当前为AI生成内容”标识。</p>
+
+<h3 class="art-h3">5.新监管政策对行业的影响</h3>
+
+<p class="art-p">不同于欧盟《人工智能法案》对 AI的七要素界定[^e1]清晰地排除了传统APP与简单交互系统，2025年12月27日国内发布的《人工智能拟人化互动服务管理暂行办法（征求意见稿）》使用“拟人化互动服务”的宽泛定义，旨在对所有以模拟人类人格特征为核心的人工智能互动服务进行监管，可能对虚拟偶像AI数字人产业造成一定的发展阻力。</p>
+
+<p class="art-p">例如，该办法要求运营方应当显著提示用户正在与人工智能而非自然人进行交互，在用户初次使用、重新登录时，应当以弹窗等方式动态提醒用户交互内容为人工智能生成（连续使用超2小时需弹窗提示），避免诱导用户过度依赖，这可能降低用户粘性，无法长期运营。</p>
+
+<p class="art-p">该办法规定运营方应当建立未成年人模式，向用户提供未成年人模式切换、定期现实提醒、使用时长限制等个性化安全设置选项，并需取得监护人同意，这可能导致部分AI数字人服务的用户群体受限，限制商业拓展。</p>
+
+<p class="art-p">该办法规定运营方采取数据加密、安全审计、访问控制等措施保护用户交互数据安全，且不得将用户交互数据用于模型训练，这可能限制AI模型的迭代优化能力，影响服务的个性化和智能化水平。</p>
+
+<p class="art-p">[^e1]: 判断人工智能系统的依据：人工智能系统的定义涵盖范围广泛，判断一个软件系统是否属于人工智能系统，不能简单地通过自动判定或依据详尽清单来确定。需要综合考虑该系统的具体架构和功能，并依据《人工智能法案》第3(1)条中规定的七个定义要素，即基于机器的系统、自主性、适应性、系统目标、使用AI技术推断生成输出的能力、影响物理或虚拟环境的输出以及与环境的交互等方面进行全面评估。</p>
+    </div>
+    <div class="modal-author">作者：赖宁 · 卓建律师事务所 · AI数据合规专项</div>
+  </div>
+</div>
+<script>
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // Close on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) closeModal(this.id);
+    });
+  });
+  // Close on ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(m => {
+        closeModal(m.id);
+      });
+    }
+  });
+</script>
+
 </body>
 </html>
