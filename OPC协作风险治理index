@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="OPC项目协作风险自查工具：几个一人公司一起接项目，帮牵头方理清对外担责、成果IP、分成开票、退出违约四类法律风险，生成协作框架协议要点。赖宁律师出品。">
+<meta property="og:title" content="OPC项目协作风险自查 · 赖宁律师">
+<meta property="og:description" content="商业上是一个团队，法律上是一盘散沙。3分钟理清你替整个虚拟团队背了哪些锅。">
+<meta property="og:type" content="website">
+<title>OPC项目协作风险自查 · 赖宁律师</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f2ec;
+    --accent: #c8440a;
+    --accent2: #1a3a5c;
+    --muted: #8a8278;
+    --rule: #d9d4ca;
+    --card: #edeae2;
+    --warn: #b8860b;
+    --danger: #a02617;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Serif SC', serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* 纸纹底 */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(var(--rule) 0.5px, transparent 0.5px);
+    background-size: 22px 22px; opacity: 0.25;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ── 顶栏 ── */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(245,242,236,0.9); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.9rem 0;
+  }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--ink); text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .back-home {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em;
+    color: var(--muted); text-decoration: none; border: 1px solid var(--rule);
+    padding: 0.35rem 0.8rem; border-radius: 2px;
+  }
+  .back-home:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── 头部 ── */
+  header { padding: 3rem 0 2rem; }
+  .eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+  }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; line-height: 1.2; margin-bottom: 1rem; }
+  .lead { font-size: 1.02rem; color: #3d3a34; max-width: 60ch; }
+  .thesis {
+    margin: 1.5rem 0 0; padding: 1rem 1.3rem; background: var(--card);
+    border-left: 3px solid var(--accent); font-size: 0.95rem;
+  }
+  .thesis strong { color: var(--accent); }
+
+  /* ── 进度指示 ── */
+  .steps {
+    display: flex; gap: 0.5rem; margin: 2rem 0 1.5rem; flex-wrap: wrap;
+  }
+  .step-dot {
+    font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    padding: 0.3rem 0.7rem; border-radius: 2rem; border: 1px solid var(--rule);
+    color: var(--muted); background: none; cursor: default; transition: all 0.2s;
+  }
+  .step-dot.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .step-dot.done { border-color: var(--accent2); color: var(--accent2); }
+
+  /* ── 卡片区块 ── */
+  .panel { display: none; animation: fade 0.4s; }
+  .panel.show { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .panel-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .panel-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.75rem; }
+
+  .field { margin-bottom: 1.4rem; }
+  .field label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .field .hint { font-weight: 400; color: var(--muted); font-size: 0.78rem; margin-left: 0.4rem; }
+  .field input[type=text], .field input[type=number], .field textarea, .field select {
+    width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--rule); border-radius: 3px;
+    background: var(--paper); font-family: inherit; font-size: 0.92rem; color: var(--ink);
+  }
+  .field textarea { resize: vertical; min-height: 68px; }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: 2px solid var(--accent2); outline-offset: 1px; border-color: transparent;
+  }
+
+  /* 选项组 */
+  .opt-group { display: flex; flex-direction: column; gap: 0.6rem; }
+  .opt {
+    display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.85rem 1rem;
+    border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; background: var(--paper);
+    transition: all 0.15s;
+  }
+  .opt:hover { border-color: var(--accent2); background: var(--card); }
+  .opt input { margin-top: 0.3rem; accent-color: var(--accent); flex-shrink: 0; }
+  .opt-body { flex: 1; }
+  .opt-label { font-size: 0.9rem; font-weight: 600; }
+  .opt-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
+  .opt.checked { border-color: var(--accent); background: var(--card); }
+
+  /* 按钮 */
+  .btn-row { display: flex; gap: 0.75rem; margin-top: 2rem; flex-wrap: wrap; }
+  .btn {
+    font-family: 'DM Mono', monospace; font-size: 0.82rem; letter-spacing: 0.05em;
+    padding: 0.7rem 1.5rem; border-radius: 3px; cursor: pointer; border: 1px solid var(--ink);
+    background: var(--ink); color: var(--paper); transition: all 0.2s;
+  }
+  .btn:hover { background: transparent; color: var(--ink); }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .btn.ghost:hover { background: var(--ink); color: var(--paper); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── 风险报告 ── */
+  .risk-summary { margin-bottom: 1.5rem; padding: 1.2rem 1.4rem; border-radius: 4px; background: var(--card); }
+  .risk-count { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent); }
+  .risk-item {
+    margin-bottom: 1rem; padding: 1.1rem 1.3rem; border-radius: 4px; background: var(--paper);
+    border-left: 4px solid var(--rule);
+  }
+  .risk-item.high { border-left-color: var(--danger); }
+  .risk-item.mid { border-left-color: var(--warn); }
+  .risk-item.low { border-left-color: var(--accent2); }
+  .risk-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+  .risk-level {
+    font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.05em;
+    padding: 0.15rem 0.6rem; border-radius: 2rem; color: var(--paper);
+  }
+  .risk-level.high { background: var(--danger); }
+  .risk-level.mid { background: var(--warn); }
+  .risk-level.low { background: var(--accent2); }
+  .risk-title { font-size: 1rem; font-weight: 700; }
+  .risk-desc { font-size: 0.86rem; color: #3d3a34; margin-bottom: 0.5rem; }
+  .risk-clause {
+    font-size: 0.82rem; color: var(--accent2); background: var(--card);
+    padding: 0.5rem 0.8rem; border-radius: 3px;
+  }
+  .risk-clause b { color: var(--ink); }
+
+  /* CTA */
+  .cta {
+    margin-top: 2rem; padding: 1.5rem 1.6rem; border-radius: 4px;
+    background: var(--accent2); color: #f0ede6;
+  }
+  .cta h3 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; color: #fff; }
+  .cta p { font-size: 0.88rem; opacity: 0.92; margin-bottom: 1rem; }
+  .cta a {
+    display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.82rem;
+    padding: 0.6rem 1.3rem; background: var(--accent); color: #fff; text-decoration: none;
+    border-radius: 3px;
+  }
+  .cta a:hover { background: #a8380a; }
+
+  /* 免责 & 隐私声明 */
+  /* ── 文书工具箱 ── */
+  .toolkit { margin-top: 2rem; }
+  .toolkit-head h3 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .toolkit-head p { font-size: 0.9rem; color: #3d3a34; margin-bottom: 1.25rem; }
+  .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.7rem; }
+  .doc {
+    padding: 0.9rem 1rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper);
+    position: relative;
+  }
+  .doc.relevant { border-color: var(--accent); border-left-width: 4px; background: var(--card); }
+  .doc-tag {
+    font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.04em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .doc.relevant .doc-tag { color: var(--accent); }
+  .doc-name { font-size: 0.9rem; font-weight: 700; margin: 0.2rem 0 0.3rem; }
+  .doc-when { font-size: 0.76rem; color: var(--muted); line-height: 1.55; }
+  .doc-flag {
+    position: absolute; top: 0.6rem; right: 0.7rem;
+    font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--accent);
+  }
+  .toolkit-note {
+    margin-top: 1.25rem; padding: 0.85rem 1.1rem; background: var(--card);
+    border-left: 3px solid var(--accent2); font-size: 0.82rem; border-radius: 0 3px 3px 0;
+  }
+
+  .disclaimer {
+    margin: 2.5rem 0 1rem; padding: 1rem 1.2rem; border: 1px dashed var(--rule);
+    border-radius: 4px; font-size: 0.78rem; color: var(--muted); line-height: 1.7;
+  }
+  .disclaimer b { color: var(--accent2); }
+  footer { padding: 2rem 0 3rem; text-align: center; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); }
+
+  /* toast */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: var(--paper); padding: 0.7rem 1.4rem; border-radius: 3px;
+    font-size: 0.85rem; opacity: 0; pointer-events: none; transition: 0.25s; z-index: 100; max-width: 88vw;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, .opt:focus-within {
+    outline: 2px solid var(--accent2); outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  @media (max-width: 600px) {
+    h1 { font-size: 1.9rem; }
+    .btn-row { flex-direction: column; }
+    .btn { width: 100%; text-align: center; }
+  }
+  @media print {
+    nav, .steps, .btn-row, .cta, .toast, .back-home { display: none !important; }
+    body::before { display: none; }
+    .panel { display: block !important; }
+    #panel-intro, #panel-project, #panel-quiz { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="../../index.html" class="logo">Lai<span>.</span>Law</a>
+    <a href="../../index.html" class="back-home">← 返回主页 / Home</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ══ 头部 ══ -->
+  <header>
+    <div class="eyebrow">Tool 03 · OPC项目协作风险自查</div>
+    <h1>几个人一起接的项目，<br>法律上是谁在担责？</h1>
+    <p class="lead">几个一人公司凑在一起交付一个项目——客户看到的是一个团队，法律上却是各自独立的主体。这个自查帮牵头方在项目开始前，理清自己替整个虚拟团队背了哪些锅，并生成一份可以拿去和协作方讨论、或交律师复核的《协作框架协议》要点。</p>
+    <div class="thesis"><strong>核心问题：</strong>商业上是一个团队，法律上是一盘散沙。责任、成果、分成、退出——都散在不同主体之间，出事时缺一份把链条讲清楚的协议。</div>
+  </header>
+
+  <!-- ══ 进度 ══ -->
+  <div class="steps" id="steps">
+    <span class="step-dot active" data-s="intro">开始</span>
+    <span class="step-dot" data-s="project">① 项目概况</span>
+    <span class="step-dot" data-s="quiz">② 风险自查</span>
+    <span class="step-dot" data-s="report">③ 风险报告</span>
+  </div>
+
+  <!-- ══ Panel: Intro ══ -->
+  <section class="panel show" id="panel-intro">
+    <p class="panel-sub" style="margin-bottom:1.25rem;">这个自查大约需要 3 分钟。你只需以牵头方的身份回答——不需要协作方参与。所有信息只在你的浏览器里处理，不会上传任何服务器。</p>
+    <div class="opt-group">
+      <div class="opt" style="cursor:default;"><div class="opt-body"><div class="opt-label">谁适合用</div><div class="opt-desc">对外和客户签约、组织其他一人公司/工作室共同交付项目、通常担第一责任的牵头方。</div></div></div>
+      <div class="opt" style="cursor:default;"><div class="opt-body"><div class="opt-label">你会得到什么</div><div class="opt-desc">一份按你项目情况定制的风险清单（分高/中/低），加一套对应的协作文书导引——主协议+八个附件，覆盖从启动到归档的每个节点。可打印或截图带走。</div></div></div>
+      <div class="opt" style="cursor:default;"><div class="opt-body"><div class="opt-label">这不是什么</div><div class="opt-desc">不是正式合同、不替代律师意见、不做电子签约。它帮你看清风险、准备好和协作方谈什么、以及带着什么问题找律师。</div></div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="go('project')">开始自查 →</button>
+    </div>
+  </section>
+
+  <!-- ══ Panel: Project ══ -->
+  <section class="panel" id="panel-project">
+    <div class="panel-title">① 项目概况</div>
+    <div class="panel-sub">先描述这个项目的基本情况，用于生成报告抬头。这些信息不会离开你的浏览器。</div>
+
+    <div class="field">
+      <label>项目名称<span class="hint">选填</span></label>
+      <input type="text" id="p-name" placeholder="如：某品牌小程序开发与视觉设计">
+    </div>
+    <div class="field">
+      <label>客户名称<span class="hint">选填</span></label>
+      <input type="text" id="p-client" placeholder="如：某某科技有限公司">
+    </div>
+    <div class="field">
+      <label>项目类型<span class="hint">选填</span></label>
+      <select id="p-type">
+        <option value="">请选择…</option>
+        <option>软件/小程序开发</option>
+        <option>设计/视觉交付</option>
+        <option>内容/文案创作</option>
+        <option>咨询/方案服务</option>
+        <option>AI应用/模型服务</option>
+        <option>综合交付（多类型组合）</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>参与的独立主体数量<span class="hint">含你自己，按公司/工作室数量算</span></label>
+      <select id="p-count">
+        <option value="">请选择…</option>
+        <option value="1">只有我一家（暂无协作方）</option>
+        <option value="2">2 家</option>
+        <option value="3">3 家</option>
+        <option value="4+">4 家及以上</option>
+      </select>
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="go('intro')">← 上一步</button>
+      <button class="btn" onclick="go('quiz')">下一步：风险自查 →</button>
+    </div>
+  </section>
+
+  <!-- ══ Panel: Quiz ══ -->
+  <section class="panel" id="panel-quiz">
+    <div class="panel-title">② 风险自查</div>
+    <div class="panel-sub">按你项目的真实情况勾选。每一题对应一类真实会出事的地方——如实回答，报告才有用。</div>
+    <div id="quiz-body"></div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="go('project')">← 上一步</button>
+      <button class="btn" onclick="buildReport()">生成风险报告 →</button>
+    </div>
+  </section>
+
+  <!-- ══ Panel: Report ══ -->
+  <section class="panel" id="panel-report">
+    <div class="panel-title">③ 你的项目风险报告</div>
+    <div class="panel-sub" id="report-meta"></div>
+    <div id="report-body"></div>
+
+    <!-- 配套文书工具箱 -->
+    <div class="toolkit">
+      <div class="toolkit-head">
+        <h3>你需要的一整套协作文书</h3>
+        <p>上面的风险，靠一份主协议加八个配套附件就能系统性地管住。这是一套按项目生命周期组织的文书，覆盖从启动到归档的每个节点——不是散装模板，是咬合成体系的一整套。</p>
+      </div>
+      <div class="doc-grid" id="doc-grid"></div>
+      <p class="toolkit-note">📎 这套文书 + 一份可导入飞书的项目管理表格，构成完整的协作管理工具包。想要这套文书为你的具体项目定制，可以直接找我。</p>
+    </div>
+
+    <div class="cta">
+      <h3>把风险变成一套文书</h3>
+      <p>上面每一条风险，对应的都是这套文书里应该写清的一个条款。项目金额越大、协作方越多，越值得在开工前把它落成白纸黑字。我是专注数据合规与项目协作的律师，可以帮你把这份自查结果，变成一套适配你项目、可执行的协作文书。</p>
+      <a href="../../index.html#contact" onclick="stashForContact()">→ 找赖律师定制这套文书</a>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn ghost" onclick="go('quiz')">← 改答案</button>
+      <button class="btn ghost" onclick="window.print()">打印 / 存为 PDF</button>
+      <button class="btn ghost" onclick="restart()">重新开始</button>
+    </div>
+
+    <div class="disclaimer">
+      <b>说明与边界：</b>本工具面向中国法律环境下的项目协作场景，输出为风险提示和协议要点，<b>不构成正式法律意见，也不是可直接签署的合同</b>。是否适用于你的具体项目、条款如何拟定，需结合项目实际情况由律师复核。本工具不做电子签约、不做证据存证——所有作答仅在你本机浏览器处理，关闭页面即清除，不上传、不留存。
+    </div>
+  </section>
+
+  <footer>
+    赖宁律师 · 卓建律师事务所 · AI数据合规与项目协作　|　本页无后端，数据不出本机
+  </footer>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+  // ═══════════════ 状态 ═══════════════
+  var state = { step: 'intro', project: {}, answers: {} };
+  var ORDER = ['intro','project','quiz','report'];
+
+  function toast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._t); t._t = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  function go(step){
+    // 保存项目信息
+    if(state.step === 'project'){
+      state.project = {
+        name: val('p-name'), client: val('p-client'),
+        type: val('p-type'), count: val('p-count')
+      };
+    }
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('show'); });
+    document.getElementById('panel-' + step).classList.add('show');
+    state.step = step;
+    // 进度点
+    var idx = ORDER.indexOf(step);
+    document.querySelectorAll('.step-dot').forEach(function(d){
+      var di = ORDER.indexOf(d.getAttribute('data-s'));
+      d.classList.toggle('active', di === idx);
+      d.classList.toggle('done', di < idx);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if(step === 'quiz' && !document.getElementById('quiz-body').hasChildNodes()) renderQuiz();
+  }
+  function val(id){ return (document.getElementById(id).value || '').trim(); }
+
+  // ═══════════════ 自查题库 ═══════════════
+  // 每题：id, 问题, 选项[{v值, label, risk触发?}], 关联风险模块
+  var QUIZ = [
+    { id: 'sign', module: '对外担责',
+      q: '对外和客户签合同、收客户款的，是不是只有你一家？',
+      opts: [
+        { v: 'solo', label: '是，只有我签约、我收款', desc: '客户追责只会找我' },
+        { v: 'joint', label: '不是，多家分别和客户签', desc: '各自对客户负责' },
+        { v: 'unsure', label: '还没签 / 不确定', desc: '合同关系尚未定' },
+      ]},
+    { id: 'subcontract', module: '对外担责',
+      q: '客户合同里，是否允许你引入协作方或分包？',
+      opts: [
+        { v: 'allow', label: '明确允许', desc: '' },
+        { v: 'silent', label: '没写 / 没注意', desc: '' },
+        { v: 'forbid', label: '明确不允许或限制', desc: '' },
+      ]},
+    { id: 'brand', module: '对外担责',
+      q: '对外是否用"团队""联合出品""我们"这类统一形象展示？',
+      opts: [
+        { v: 'yes', label: '是，统一对外形象', desc: '共用品牌/网站/署名' },
+        { v: 'no', label: '否，各自独立署名', desc: '' },
+      ]},
+    { id: 'ip_creator', module: '成果IP',
+      q: '最终交付客户的成果，是不是由多家分别创作后拼合的？',
+      opts: [
+        { v: 'multi', label: '是，多家各做一部分', desc: '' },
+        { v: 'single', label: '主要由我一家完成', desc: '' },
+      ]},
+    { id: 'ip_promise', module: '成果IP',
+      q: '你和客户约定"成果知识产权归客户"或"授权客户使用"了吗？',
+      opts: [
+        { v: 'promised', label: '约定了归客户 / 授权客户', desc: '' },
+        { v: 'none', label: '没约定 / 不清楚', desc: '' },
+      ]},
+    { id: 'material', module: '成果IP',
+      q: '交付成果里是否用到第三方素材、开源代码或AI生成内容？',
+      opts: [
+        { v: 'yes', label: '有用到（任一）', desc: '素材/开源/AI生成' },
+        { v: 'no', label: '没有', desc: '' },
+        { v: 'unsure', label: '不确定协作方用没用', desc: '' },
+      ]},
+    { id: 'split', module: '分工分成',
+      q: '内部怎么分钱，约定到什么程度了？',
+      opts: [
+        { v: 'oral', label: '口头说了个大概比例', desc: '如"三七分"' },
+        { v: 'written', label: '有书面的分配规则', desc: '' },
+        { v: 'none', label: '还没谈 / 边做边说', desc: '' },
+      ]},
+    { id: 'invoice', module: '分工分成',
+      q: '你把钱分给协作方时，对方能开发票给你吗？',
+      opts: [
+        { v: 'can', label: '能，都能开票', desc: '' },
+        { v: 'partial', label: '部分能 / 没确认', desc: '' },
+        { v: 'cannot', label: '有的开不了票', desc: '' },
+      ]},
+    { id: 'exit', module: '退出违约',
+      q: '如果某个协作方中途掉链子（延期/失联/退出），有约定怎么办吗？',
+      opts: [
+        { v: 'yes', label: '有约定处理方式', desc: '' },
+        { v: 'no', label: '没约定', desc: '' },
+      ]},
+    { id: 'confid', module: '退出违约',
+      q: '项目结束后，协作方能不能直接去接这个客户、或把项目经验用到竞品上，约定了吗？',
+      opts: [
+        { v: 'yes', label: '约定了保密/客户保护', desc: '' },
+        { v: 'no', label: '没约定（碍于情面）', desc: '' },
+      ]},
+  ];
+
+  function renderQuiz(){
+    var single = state.project.count === '1';
+    var body = document.getElementById('quiz-body');
+    body.innerHTML = QUIZ.map(function(item, qi){
+      return '<div class="field"><label>' + (qi+1) + '. ' + item.q + '</label>' +
+        '<div class="opt-group">' +
+        item.opts.map(function(o){
+          return '<label class="opt" onclick="pick(this)">' +
+            '<input type="radio" name="q_' + item.id + '" value="' + o.v + '">' +
+            '<span class="opt-body"><span class="opt-label">' + o.label + '</span>' +
+            (o.desc ? '<span class="opt-desc">' + o.desc + '</span>' : '') + '</span></label>';
+        }).join('') + '</div></div>';
+    }).join('');
+    if(single){
+      var note = document.createElement('div');
+      note.className = 'thesis';
+      note.style.marginTop = '0';
+      note.innerHTML = '你选择了"暂无协作方"。这个自查是为多主体协作设计的——如果这个项目确实只有你一家，法律结构相对简单，可以先跳过。等你要拉人一起做时再回来。';
+      body.insertBefore(note, body.firstChild);
+    }
+  }
+
+  function pick(labelEl){
+    // 视觉高亮同组
+    var name = labelEl.querySelector('input').name;
+    document.querySelectorAll('input[name="' + name + '"]').forEach(function(i){
+      i.closest('.opt').classList.remove('checked');
+    });
+    labelEl.classList.add('checked');
+  }
+
+  // ═══════════════ 风险规则引擎 ═══════════════
+  // 每条规则：条件函数 → 命中则产出一条风险
+  function assess(a){
+    var risks = [];
+    // ── 对外担责 ──
+    if(a.sign === 'solo'){
+      risks.push({ lvl:'high', module:'对外担责', title:'你是唯一的对外责任入口',
+        desc:'只有你签约收款，意味着客户出任何问题都只找你——哪怕问题出在别的协作方那部分。你等于用自己一家公司，给整个虚拟团队对客户兜了底。',
+        clause:'框架协议应写明：<b>牵头方系客户合同第一责任入口，但各方内部责任按实际分工、过错来源划分</b>；因某协作方原因导致牵头方对客户担责的，牵头方有权向其追偿。' });
+    }
+    if(a.sign === 'unsure'){
+      risks.push({ lvl:'mid', module:'对外担责', title:'签约关系还没定，责任入口悬空',
+        desc:'客户合同还没签或不确定，意味着"谁对外担责"这个最关键的问题还没锁定。越早明确，后面越省事。',
+        clause:'开工前先定清楚：<b>谁对外签约、谁收款</b>，并在框架协议第一条固定下来。' });
+    }
+    if(a.subcontract === 'forbid'){
+      risks.push({ lvl:'high', module:'对外担责', title:'客户合同可能不允许你分包',
+        desc:'如果客户合同限制或禁止分包/引入协作方，你现在的协作模式本身可能已经违约。客户一旦知情，可主张解约或追责。',
+        clause:'先核查客户合同的分包条款；如受限，需<b>争取客户书面同意</b>，或调整为客户可接受的协作结构，再落协作框架。' });
+    }
+    if(a.subcontract === 'silent'){
+      risks.push({ lvl:'low', module:'对外担责', title:'客户合同对分包没约定',
+        desc:'合同没写能不能分包，属于灰色地带。多数情况下问题不大，但客户若较真，仍可能主张你未经同意擅自分包。',
+        clause:'建议留存与客户就协作方式的<b>沟通记录</b>；重要项目可主动向客户书面报备协作结构。' });
+    }
+    if(a.brand === 'yes'){
+      risks.push({ lvl:'high', module:'对外担责', title:'"团队"形象可能击穿有限责任',
+        desc:'共用品牌、统一以"我们/团队"对外，一旦客户起诉，各方有被认定为事实合伙或共同侵权的风险——那样每一方都可能对客户的全部损失担连带责任，一人公司的有限责任保护就废了。',
+        clause:'框架协议应写明：<b>各方为独立主体，不构成合伙</b>；对外统一形象仅为交付便利，任何一方不得以团队名义承诺超出自身分工的事项。' });
+    }
+    // ── 成果IP ──
+    if(a.ip_creator === 'multi'){
+      risks.push({ lvl:'high', module:'成果IP', title:'拼合成果的IP是一笔糊涂账',
+        desc:'多家分别创作再拼合，若没约定，成果可能构成合作作品——各方都有权利、但谁都不能单独处分。你想把整个成果交付给客户，理论上要所有协作方同意。',
+        clause:'需要一份《成果IP归集确认书》：<b>各协作方将其创作部分的权利先归集/授权给牵头方</b>，牵头方才有资格统一向客户交付或授权。' });
+    }
+    if(a.ip_promise === 'promised' && a.ip_creator === 'multi'){
+      risks.push({ lvl:'high', module:'成果IP', title:'你对客户的IP承诺，可能超出了你手上的权利',
+        desc:'你答应客户"成果归客户/授权客户"，但成果是协作方创作的，你手里未必拿到了完整授权。协作方事后一主张权利，你就对客户构成违约。',
+        clause:'先完成内部IP归集，<b>确保你对客户的承诺有上游授权支撑</b>；归集确认书的效力范围应覆盖你对客户的全部承诺。' });
+    }
+    if(a.material === 'yes' || a.material === 'unsure'){
+      risks.push({ lvl:'mid', module:'成果IP', title:(a.material==='unsure'?'不清楚协作方用没用第三方素材':'第三方素材/开源/AI内容的责任归属未定'),
+        desc:'协作方在自己那部分用了素材库、开源代码或AI生成内容，若没约定，这些的合规责任最后往往由你对客户兜底。AI生成内容的版权归属目前尤其不确定。',
+        clause:'框架协议应要求：<b>各方对自己交付部分的素材来源合法性负责并作出保证</b>，因素材瑕疵导致的责任由该方承担。' });
+    }
+    // ── 分工分成 ──
+    if(a.split === 'oral' || a.split === 'none'){
+      risks.push({ lvl:(a.split==='none'?'high':'mid'), module:'分工分成', title:'分成没有可执行的书面依据',
+        desc:'口头"三七分"或边做边说，到分钱时每个人对自己贡献的评估都偏高，这是纠纷最高发的地方。而且几家是平等主体，没有上级拍板，容易僵持。',
+        clause:'需要一份《收益分配与开票确认书》：<b>把分配规则、每方金额或计算方式、付款条件白纸黑字定下来</b>，各方确认。' });
+    }
+    if(a.invoice === 'cannot' || a.invoice === 'partial'){
+      risks.push({ lvl:'mid', module:'分工分成', title:'开票链条不通，你可能重复承担税负',
+        desc:'客户的钱先进你的账，你再分给协作方——这在税务上是你向对方采购服务，需要对方开票给你。有协作方开不了票，你这部分成本无法入账，等于就分出去的钱多缴一道税。',
+        clause:'分配方案里应明确：<b>各协作方的开票义务、发票类型和税费承担</b>；开不了票的主体，需在分配金额中考虑税负差异。' });
+    }
+    // ── 退出违约 ──
+    if(a.exit === 'no'){
+      risks.push({ lvl:'high', module:'退出违约', title:'有人掉链子时，违约后果全压在你身上',
+        desc:'对客户的交付deadline是你承诺的。某个协作方延期或失联，客户只会追你的责。没有约定的话，你既没法及时换人，也没法把损失传导回去。',
+        clause:'框架协议应约定：<b>协作方延期/失联/退出时的补位机制、成果交接义务和违约责任</b>，让损失可以传导回实际责任方。' });
+    }
+    if(a.confid === 'no'){
+      risks.push({ lvl:'mid', module:'退出违约', title:'协作方可能项目结束后直接接走你的客户',
+        desc:'协作过程中各方都接触了客户和你的方法论。没有保密和客户保护约定，协作方完全可以转头去接这个客户的下一单，或把经验用到竞品上。',
+        clause:'需要一份《保密与客户资源保护承诺书》：<b>约定项目期间及结束后一定期限内的保密义务、不得绕单接触客户</b>的义务。' });
+    }
+    return risks;
+  }
+
+  function buildReport(){
+    // 收集答案
+    var a = {};
+    QUIZ.forEach(function(item){
+      var sel = document.querySelector('input[name="q_' + item.id + '"]:checked');
+      if(sel) a[item.id] = sel.value;
+    });
+    state.answers = a;
+
+    if(Object.keys(a).length === 0){
+      toast('先回答几道题再生成报告'); return;
+    }
+    var risks = assess(a);
+    // 排序：高→中→低
+    var rank = { high:0, mid:1, low:2 };
+    risks.sort(function(x,y){ return rank[x.lvl] - rank[y.lvl]; });
+
+    var p = state.project;
+    var meta = [];
+    if(p.name) meta.push('项目：' + esc(p.name));
+    if(p.client) meta.push('客户：' + esc(p.client));
+    if(p.type) meta.push(esc(p.type));
+    if(p.count) meta.push('参与主体：' + esc(p.count) + (p.count==='1'?'家':'家'));
+    document.getElementById('report-meta').innerHTML = meta.length ? meta.join('　·　') : '按你的作答生成';
+
+    var hi = risks.filter(function(r){return r.lvl==='high';}).length;
+    var body = document.getElementById('report-body');
+
+    if(risks.length === 0){
+      body.innerHTML = '<div class="risk-summary"><div class="risk-count">0</div>' +
+        '<div>按你的作答，没有触发明显的高风险点——你对这个项目的法律结构已经想得比较清楚了。即便如此，把关键约定落成一份书面框架协议，仍是对所有协作方最好的保护。</div></div>';
+    } else {
+      var summary = '<div class="risk-summary"><div class="risk-count">' + risks.length + ' 项风险</div>' +
+        '<div>其中 <b style="color:var(--danger)">' + hi + ' 项高风险</b>。下面每一条都对应你这个项目里一个真实会出事的地方，以及应该在《协作框架协议》里写清的条款要点。</div></div>';
+      var items = risks.map(function(r){
+        var lvlText = { high:'高风险', mid:'中风险', low:'低风险' }[r.lvl];
+        return '<div class="risk-item ' + r.lvl + '">' +
+          '<div class="risk-head"><span class="risk-level ' + r.lvl + '">' + lvlText + '</span>' +
+          '<span class="risk-title">' + r.title + '</span>' +
+          '<span style="font-family:\'DM Mono\',monospace;font-size:0.66rem;color:var(--muted);margin-left:auto;">' + r.module + '</span></div>' +
+          '<div class="risk-desc">' + r.desc + '</div>' +
+          '<div class="risk-clause">📎 条款要点：' + r.clause + '</div></div>';
+      }).join('');
+      body.innerHTML = summary + items;
+    }
+    renderDocs(risks);
+    go('report');
+  }
+
+  // ═══ 配套文书工具箱 ═══
+  var DOCS = [
+    { tag:'主协议', name:'项目协作框架协议书', when:'项目启动时签，是所有约定的总纲', modules:['对外担责','成果IP','分工分成','退出违约'] },
+    { tag:'附件一', name:'项目分工与交付清单', when:'明确谁做什么、交付标准、责任边界', modules:['对外担责','分工分成'] },
+    { tag:'附件二', name:'成果IP归集确认书', when:'成果交付客户前，归集各方权利', modules:['成果IP'] },
+    { tag:'附件三', name:'收益分配与开票确认书', when:'确认分成规则和开票安排', modules:['分工分成'] },
+    { tag:'附件四', name:'项目变更确认单', when:'客户加需求/改预算/调分工时用', modules:['分工分成','成果IP'] },
+    { tag:'附件五', name:'成果交付与结算确认书', when:'项目交付、结算时确认', modules:['成果IP','分工分成'] },
+    { tag:'附件六', name:'协作方退出与交接确认书', when:'有人中途退出时用', modules:['退出违约'] },
+    { tag:'附件七', name:'保密与客户资源保护承诺书', when:'项目启动时签，防绕单、防泄密', modules:['退出违约'] },
+    { tag:'附件八', name:'项目归档清单', when:'项目结束归档时用', modules:['对外担责','成果IP','分工分成','退出违约'] },
+  ];
+  function renderDocs(risks){
+    var hitModules = {};
+    (risks || []).forEach(function(r){ hitModules[r.module] = true; });
+    var grid = document.getElementById('doc-grid');
+    grid.innerHTML = DOCS.map(function(d){
+      var relevant = d.modules.some(function(m){ return hitModules[m]; });
+      return '<div class="doc' + (relevant ? ' relevant' : '') + '">' +
+        (relevant ? '<span class="doc-flag">● 对应你的风险</span>' : '') +
+        '<div class="doc-tag">' + d.tag + '</div>' +
+        '<div class="doc-name">' + d.name + '</div>' +
+        '<div class="doc-when">' + d.when + '</div></div>';
+    }).join('');
+  }
+
+  function esc(s){ return String(s).replace(/[<>&"]/g, function(c){ return { '<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;' }[c]; }); }
+
+  function stashForContact(){
+    // 把项目名带到联系表单（同源sessionStorage在主页可读）——但主页目前用mailto，这里仅toast引导
+    toast('正在跳转到联系方式…');
+  }
+
+  function restart(){
+    state = { step:'intro', project:{}, answers:{} };
+    document.getElementById('quiz-body').innerHTML = '';
+    ['p-name','p-client'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.getElementById('p-type').selectedIndex = 0;
+    document.getElementById('p-count').selectedIndex = 0;
+    go('intro');
+  }
+</script>
+</body>
+</html>
